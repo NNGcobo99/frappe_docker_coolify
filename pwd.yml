@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+  container_name: frappe app
   backend:
     image: frappe/erpnext:v15.40.0
     deploy:
@@ -70,6 +71,7 @@ services:
         bench new-site --no-mariadb-socket --admin-password=admin --db-root-password=admin --install-app erpnext --set-default frontend;
 
   db:
+    container_name: frappe db
     image: mariadb:10.6
     healthcheck:
       test: mysqladmin ping -h localhost --password=admin
@@ -89,6 +91,7 @@ services:
       - db-data:/var/lib/mysql
 
   frontend:
+    container_name: frappe frontend
     image: frappe/erpnext:v15.40.0
     depends_on:
       - websocket
@@ -109,8 +112,8 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
-    ports:
-      - "8080:8080"
+    # ports:
+    #   - "8080:8080"
 
   queue-long:
     image: frappe/erpnext:v15.40.0
